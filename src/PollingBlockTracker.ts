@@ -30,6 +30,8 @@ export class PollingBlockTracker extends BaseBlockTracker {
 
   private _setSkipCacheFlag: boolean;
 
+  private _errorCount = 0;
+
   constructor(opts: Partial<PollingBlockTrackerArgs> = {}) {
     // parse + validate args
     if (!opts.provider) {
@@ -63,10 +65,16 @@ export class PollingBlockTracker extends BaseBlockTracker {
       try {
         await this._updateLatestBlock();
         await timeout(this._pollingInterval, !this._keepEventLoopActive);
+        this._errorCount = 0;
       } catch (err) {
+
         const newErr = new Error(`PollingBlockTracker - encountered an error while attempting to update latest block:\n${err.stack}`);
         try {
-          this.emit('error', newErr);
+          // only emit error when the error count is > 3
+          this._errorCount++;
+          if (this._errorCount > 3) {
+            this.emit('error', newErr);
+          }
         } catch (emitErr) {
           console.error(newErr);
         }

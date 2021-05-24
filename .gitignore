@@ -2,7 +2,7 @@
 # Created by https://www.gitignore.io/api/osx,node
 
 # Build directory
-/dist/
+#/dist/
 
 ### Node ###
 # Logs
@@ -90,3 +90,5 @@ Temporary Items
 .apdisk
 
 # End of https://www.gitignore.io/api/osx,node
+
+.idea
