@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.PollingBlockTracker = void 0;
 const json_rpc_random_id_1 = __importDefault(require("json-rpc-random-id"));
 const pify_1 = __importDefault(require("pify"));
 const BaseBlockTracker_1 = require("./BaseBlockTracker");
@@ -10,7 +11,6 @@ const createRandomId = json_rpc_random_id_1.default();
 const sec = 1000;
 class PollingBlockTracker extends BaseBlockTracker_1.BaseBlockTracker {
     constructor(opts = {}) {
-        this._errorCount = 0;
         // parse + validate args
         if (!opts.provider) {
             throw new Error('PollingBlockTracker - no provider specified.');
@@ -18,6 +18,7 @@ class PollingBlockTracker extends BaseBlockTracker_1.BaseBlockTracker {
         super({
             blockResetDuration: opts.pollingInterval,
         });
+        this._errorCount = 0;
         // config
         this._provider = opts.provider;
         this._pollingInterval = opts.pollingInterval || 20 * sec;
@@ -44,9 +45,11 @@ class PollingBlockTracker extends BaseBlockTracker_1.BaseBlockTracker {
                 const newErr = new Error(`PollingBlockTracker - encountered an error while attempting to update latest block:\n${err.stack}`);
                 try {
                     // only emit error when the error count is > 3
-                    this._errorCount++;
-                    if (this._errorCount > 3) {
+                    if (this._errorCount++ > 2) {
                         this.emit('error', newErr);
+                    }
+                    else {
+                        console.error(`encountered error ignored err count=${this._errorCount}`, newErr);
                     }
                 }
                 catch (emitErr) {

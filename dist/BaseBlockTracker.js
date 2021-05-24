@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BaseBlockTracker = void 0;
 const safe_event_emitter_1 = __importDefault(require("@metamask/safe-event-emitter"));
 const sec = 1000;
 const calculateSum = (accumulator, currentValue) => accumulator + currentValue;

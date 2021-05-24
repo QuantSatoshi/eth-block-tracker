@@ -71,9 +71,10 @@ export class PollingBlockTracker extends BaseBlockTracker {
         const newErr = new Error(`PollingBlockTracker - encountered an error while attempting to update latest block:\n${err.stack}`);
         try {
           // only emit error when the error count is > 3
-          this._errorCount++;
-          if (this._errorCount > 3) {
+          if (this._errorCount++ > 2) {
             this.emit('error', newErr);
+          } else {
+            console.error(`encountered error ignored err count=${this._errorCount}`, newErr);
           }
         } catch (emitErr) {
           console.error(newErr);

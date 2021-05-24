@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SubscribeBlockTracker = void 0;
 const json_rpc_random_id_1 = __importDefault(require("json-rpc-random-id"));
 const BaseBlockTracker_1 = require("./BaseBlockTracker");
 const createRandomId = json_rpc_random_id_1.default();
